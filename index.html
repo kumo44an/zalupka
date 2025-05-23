@@ -18,13 +18,10 @@
       height: 100%;
     }
 
-    .image {
+    .floating-image {
       position: absolute;
-      top: 50%;
-      left: 50%;
       width: 500px;
       height: 400px;
-      transform: translate(-50%, -50%);
       background: url('https://i.ibb.co/K3xbqqD/sticker.png') no-repeat center center;
       background-size: cover;
       z-index: 0;
@@ -42,13 +39,39 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="image"></div>
-  </div>
+  <div class="container" id="container"></div>
 
   <script>
-    const container = document.querySelector('.container');
-    let idCounter = 0;
+    const container = document.getElementById('container');
+
+    function createFloatingImage() {
+      const image = document.createElement('div');
+      image.className = 'floating-image';
+      container.appendChild(image);
+
+      let x = Math.random() * (window.innerWidth - 1000);
+      let y = Math.random() * (window.innerHeight - 2000);
+      let dx = (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 1.5);
+      let dy = (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 1.5);
+
+      function move() {
+        const w = image.offsetWidth;
+        const h = image.offsetHeight;
+
+        if (x + w >= window.innerWidth || x <= 0) dx = -dx;
+        if (y + h >= window.innerHeight || y <= 0) dy = -dy;
+
+        x += dx;
+        y += dy;
+
+        image.style.left = x + 'px';
+        image.style.top = y + 'px';
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+    }
 
     function createBouncingText() {
       const text = document.createElement('div');
@@ -78,9 +101,13 @@
       move();
     }
 
-    // Создаём первый текст и затем размножаем каждые 2 секунды
+    // Старт: первая картинка и текст
+    createFloatingImage();
     createBouncingText();
-    setInterval(createBouncingText, 2000);
+
+    // Интервалы: размножение
+    setInterval(createFloatingImage, 3000); // Картинки
+    setInterval(createBouncingText, 2000);  // Тексты
   </script>
 </body>
 </html>
