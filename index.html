@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ПОДЫШАЛ МАТКОЙ</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .floating-image {
+      position: absolute;
+      width: 500px;
+      height: 400px;
+      background: url('https://i.ibb.co/K3xbqqD/sticker.png') no-repeat center center;
+      background-size: cover;
+      z-index: 0;
+    }
+
+    .bouncing-text {
+      position: absolute;
+      font-size: 80px;
+      color: white;
+      font-weight: bold;
+      white-space: nowrap;
+      z-index: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container"></div>
+
+  <script>
+    const container = document.getElementById('container');
+
+    function createFloatingImage() {
+      const image = document.createElement('div');
+      image.className = 'floating-image';
+      container.appendChild(image);
+
+      let x = Math.random() * (window.innerWidth - 1000);
+      let y = Math.random() * (window.innerHeight - 2000);
+      let dx = (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 1.5);
+      let dy = (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 1.5);
+
+      function move() {
+        const w = image.offsetWidth;
+        const h = image.offsetHeight;
+
+        if (x + w >= window.innerWidth || x <= 0) dx = -dx;
+        if (y + h >= window.innerHeight || y <= 0) dy = -dy;
+
+        x += dx;
+        y += dy;
+
+        image.style.left = x + 'px';
+        image.style.top = y + 'px';
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+    }
+
+    function createBouncingText() {
+      const text = document.createElement('div');
+      text.className = 'bouncing-text';
+      text.textContent = 'ПОДЫШАЛ МАТКОЙ';
+      container.appendChild(text);
+
+      let x = Math.random() * (window.innerWidth - 300);
+      let y = Math.random() * (window.innerHeight - 100);
+      let dx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
+      let dy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
+
+      function move() {
+        const rect = text.getBoundingClientRect();
+        if (x + rect.width >= window.innerWidth || x <= 0) dx = -dx;
+        if (y + rect.height >= window.innerHeight || y <= 0) dy = -dy;
+
+        x += dx;
+        y += dy;
+
+        text.style.left = x + 'px';
+        text.style.top = y + 'px';
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+    }
+
+    // Старт: первая картинка и текст
+    createFloatingImage();
+    createBouncingText();
+
+    // Интервалы: размножение
+    setInterval(createFloatingImage, 3000); // Картинки
+    setInterval(createBouncingText, 2000);  // Тексты
+  </script>
+</body>
+</html>
 
